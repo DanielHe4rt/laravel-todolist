@@ -5,6 +5,8 @@ namespace App\Repositories;
 
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthRepository
 {
@@ -22,5 +24,17 @@ class AuthRepository
     {
         $all['password'] = \Hash::make($all['password']);
         return $this->model->create($all);
+    }
+
+    public function authenticate($email, $password) : void
+    {
+        $model = $this->model->where('email', $email)
+            ->first();
+
+        if (!Hash::check($password, $model->password)) {
+            throw new \Exception('Senha incorreta');
+        }
+
+        Auth::login($model);
     }
 }

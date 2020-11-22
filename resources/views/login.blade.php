@@ -58,16 +58,11 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Registro</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Sei lá mano cria conta ai</h6>
+                    <h4 class="card-title">Login</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Sei lá mano loga ai pra vc fazer seus negócio</h6>
                     <div class="card-text">
-                        <form method="post" action="{{route('register')}}" id="register">
+                        <form method="post" action="{{route('login')}}" id="register">
                             @csrf
-                            <div class="form-group">
-                                <label for="nickname">Nickname</label>
-                                <input type="text" class="form-control" name="name" id="nickname"
-                                       aria-describedby="emailHelp" placeholder="Enter email">
-                            </div>
                             <div class="form-group">
                                 <label for="email">Email address</label>
                                 <input type="email" class="form-control" name="email" id="email"
@@ -78,13 +73,7 @@
                                 <input type="password" class="form-control" name="password" id="password"
                                        aria-describedby="emailHelp" placeholder="Enter email">
                             </div>
-                            <div class="form-group">
-                                <label for="passwordc">Password Confirmation</label>
-                                <input type="password" class="form-control" name="password_confirmation" id="passwordc"
-                                       aria-describedby="emailHelp" placeholder="Enter email">
-                            </div>
-
-                            <input type="submit" class="btn btn-primary btn-block" id="createAccBtn" value="Registrar">
+                            <input type="submit" class="btn btn-primary btn-block" id="createAccBtn" value="Log-in">
                         </form>
                     </div>
                     <a href="#" class="card-link">Ir para o Login</a>
@@ -102,25 +91,23 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: '{{route('register')}}',
+                url: '{{route('login')}}',
                 data: $(this).serialize(),
                 success: function (data) {
                     $('#createAccBtn').prop('disabled', false);
-                    toastr.success('Cadastro efetuado com sucesso!', 'Boa <3');
-                    setTimeout(() => {
-                        window.location.href = "{{route('login')}}"
-                    }, 3000)
+                    toastr.success('Login efetuado com sucesso!', 'Boa <3');
+                    {{--setTimeout(() => {--}}
+                    {{--    window.location.href = "/dashboard"--}}
+                    {{--}, 3000)--}}
                 },
                 error: function (data) {
-                    $('#createAccBtn').prop('disabled', false);
-                    let errors = data.responseJSON.errors;
-
-                    for (let i in errors) {
-                        let error = errors[i];
-                        toastr.error(error[0]);
+                    console.log(data)
+                    if (data.status === 401 || data.status === 422) {
+                        toastr.error('Credenciais incorretas')
+                    } else {
+                        toastr.error('Chama o ademir que deu merda')
                     }
 
-                    console.log(data);
                 }
             });
         })

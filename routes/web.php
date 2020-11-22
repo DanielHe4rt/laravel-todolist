@@ -19,9 +19,10 @@ Route::get('/', function () {
 });
 
 
-Route::get('/auth/register', [AuthController::class, 'viewRegister']);
+Route::get('/login', [AuthController::class, 'viewLogin']);
+Route::get('/register', [AuthController::class, 'viewRegister']);
 Route::post('/auth/register', [AuthController::class, 'register'])->name('register');
-Route::post('/auth/login', [AuthController::class, 'auth']);
+Route::post('/auth/login', [AuthController::class, 'auth'])->name('login');
 //Route::post('/auth/logout', [AuthController::class, 'getItems']);
 Route::get('/items', [ItemsController::class, 'getItems']);
 Route::post('/items', [ItemsController::class, 'postItem']);

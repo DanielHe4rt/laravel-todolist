@@ -26,18 +26,25 @@ class AuthController extends Controller
             'email' => 'required|exists:users',
             'password' => 'required'
         ]);
+        try {
+            $this->repository->authenticate(
+                $request->input('email'),
+                $request->input('password')
+            );
+            return response()->json([]);
+        } catch(\Exception $exception) {
+            return response()->json(['Deu ruim'], 401);
+        }
 
-        return response()->json([]);
     }
 
     public function register(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|exists:users',
-            'password' => 'required'
+            'email' => 'required|unique:users',
+            'password' => 'required|confirmed'
         ]);
-        dd($request->all());
         $result = $this->repository->createUser($request->all());
         return response()->json($result, 201);
     }
@@ -52,5 +59,7 @@ class AuthController extends Controller
         return view('register');
     }
 
-
+    public function viewLogin() {
+        return view('login');
+    }
 }
